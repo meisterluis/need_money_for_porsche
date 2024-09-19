@@ -1,0 +1,130 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:600,400,300);
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
+
+//Colors
+$white: #fff;
+$green: #47cf73;
+$red: #c42940;
+$dark-grey: #525961;
+$light-grey: #e7edf4;
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.green {
+  color: $green;
+}
+
+.red {
+  color: $red;
+}
+
+.donation--container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 420px;
+}
+
+.donation--user {
+  margin-bottom: 50px;
+}
+
+.donation--title {
+  color: $dark-grey;
+  font-weight: 600;
+  position: absolute;
+  left: -80px;
+}
+
+.donation--goal {
+  width: 80px;
+  font-size: 12px;
+  text-align: center;
+  color: #fff;
+  position: absolute;
+  top: 101px;
+  right: -24%;
+  padding: 10px;
+  background-color: $dark-grey;
+}
+
+.donation--rounded {
+  height: 100%;
+  border-radius: 100px 0 0 100px;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+.donation--bar {
+  position: relative;
+  width: 100%;
+  height: 25px;
+  background-color: $light-grey;
+  border-radius: 100px 0 0 100px;
+}
+
+.donation--progress {
+  position: relative;
+  max-width: 100%;
+  height: 100%;
+  background-color: $green;
+  transition: width 2s linear;
+}
+
+.donation--number {
+  transition: left 2s linear;
+  position: absolute;
+  top: -18px;
+  transform: translate(-50%, -100%);
+  padding: 4px 10px;
+  color: $green;
+  font-size: 13px;
+  font-weight: 300;
+  background-color: $dark-grey;
+  border-radius: 3px;
+  &:after {
+    content: "";
+    position: absolute;
+    top: 26px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top: 5px solid #525961;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+  }
+}
+
+.donation--status {
+  margin-top: 20px;
+  text-align: center;
+  display: block;
+}
+
+.form--container {
+  display: block;
+  text-align: center;
+  margin: 30px 0;
+}
+
+.button {
+  background-color: $white;
+  color: $green;
+  font-weight: 400;
+  text-decoration: none;
+  border: 2px solid $green;
+  padding: 10px 25px;
+  transition: all .15s ease-in-out;
+  &:hover {
+    background-color: $green;
+    color: $white;
+  }
+}
+
+.input {
+  border: 2px solid $dark-grey;
+  padding: 10px;
+  margin: 30px 0;
+}
