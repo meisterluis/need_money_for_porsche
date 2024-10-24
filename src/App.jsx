@@ -13,7 +13,7 @@ function App() {
       <ambientLight intensity={0.5} />
       <pointLight position={[10, 10, 10]} />
       <Porsche position={[0, -0.3, 0]} />
-      <TransparentImages position={[0, -0.5, 0]} image1="../src/assets/img/Twint.png" image2="../src//assets/img/donateNow.png" />
+      <TransparentImages position={[0, -0.5, 0]} image1="public/img/Twint.png" image2="public/img/donateNow.png" />
       <ProgressBar position={[0, 2, 0]} currentValue={currentValue} />
     </Canvas>
   );
