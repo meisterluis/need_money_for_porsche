@@ -7,7 +7,7 @@ import React from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export function Model(props) {
-  const { nodes, materials } = useGLTF('/mobilePhone4.glb')
+  const { nodes, materials } = useGLTF('models/mobilePhone4.glb')
   return (
     <group {...props} dispose={null}>
       <group position={[-0.003, 0.27, -0.097]} rotation={[Math.PI / 2, 0, Math.PI]} scale={[0.71, 1, 0.69]}>
@@ -26,4 +26,4 @@ export function Model(props) {
   )
 }
 
-useGLTF.preload('/mobilePhone4.glb')
+useGLTF.preload('models/mobilePhone4.glb')

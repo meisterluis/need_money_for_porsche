@@ -6,50 +6,18 @@ License: CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 Source: https://sketchfab.com/3d-models/porsche-gt3-rs-e738eae819c34d19a31dd066c45e0f3d
 Title: Porsche GT3 RS
 */
-import React, { useEffect, useRef, useState } from "react";
-import { useGLTF } from "@react-three/drei";
-import { useControls } from "leva";
-import { useFrame } from "@react-three/fiber";
+import React from "react";
+import { useGLTF, Center } from "@react-three/drei";
 
 export function Porsche(props) {
-  const { wireframe } = useControls({
-    wireframe: false,
-  });
-
   const { nodes, materials } = useGLTF("models/porscheV2.glb");
-  const wireframeRef = useRef();
-  const texturedRef = useRef();
-  const porscheRef = useRef();
-  const [progress, setProgress] = useState(50);
-
-  useFrame(() => {
-    setProgress((prev) => (prev + 0.01) % 1); // Increment progress
-    if (wireframeRef.current && texturedRef.current) {
-      updateGeometries(wireframeRef.current, texturedRef.current, progress);
-    }
-
-    if(porscheRef.current){
-      porscheRef.current.rotation.y += 0.002;
-    }
-  });
-
-  useEffect(() => {
-    if (wireframeRef.current && texturedRef.current) {
-      updateGeometries(wireframeRef.current, texturedRef.current, progress);
-    }
-  }, [nodes]);
-
-  useEffect(() => {
-    Object.values(materials).forEach((material) => {
-      material.wireframe = wireframe;
-    });
-  }, [wireframe]);
 
   return (
-    <group {...props} dispose={null} ref={porscheRef} position={[0, 0, -1]}>
+    <group {...props} dispose={null}>
+    <Center>
     <group scale={0.008}>
       <group
-        position={[0, 0, 0]} // Centered position
+        position={[0, 0, 0]}
         rotation={[0, 0, 0]}
         scale={100}
       >
@@ -143,42 +111,9 @@ export function Porsche(props) {
           <mesh geometry={nodes.porsche_88.geometry} material={materials['amdb11_brake.002']} />
           </group>
       </group>
+    </Center>
     </group>
   );
 }
 
-useGLTF.preload("models/porsche_gt3_rs.glb");
-
-function updateGeometries(wireframeMesh, texturedMesh, progress) {
-  if (!wireframeMesh.geometry || !texturedMesh.geometry) return;
-
-  const wireframePositionAttr = wireframeMesh.geometry.attributes.position;
-  const texturedPositionAttr = texturedMesh.geometry.attributes.position;
-
-  if (!wireframePositionAttr || !texturedPositionAttr) return;
-
-  const threshold = Math.floor(progress * wireframePositionAttr.count);
-
-  const wireframePositions = wireframePositionAttr.array;
-  const texturedPositions = texturedPositionAttr.array;
-
-  for (let i = 0; i < wireframePositions.length; i += 3) {
-    const vertexIndex = i / 3;
-
-    if (vertexIndex < threshold) {
-      // Show this part in the textured mesh
-      texturedPositions[i] = wireframePositions[i];
-      texturedPositions[i + 1] = wireframePositions[i + 1];
-      texturedPositions[i + 2] = wireframePositions[i + 2];
-    } else {
-      // Show this part in the wireframe mesh
-      texturedPositions[i] = 0;
-      texturedPositions[i + 1] = 0;
-      texturedPositions[i + 2] = 0;
-    }
-  }
-
-  // Mark the geometries as updated
-  wireframePositionAttr.needsUpdate = true;
-  texturedPositionAttr.needsUpdate = true;
-}
+useGLTF.preload("models/porscheV2.glb");

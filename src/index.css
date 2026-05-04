@@ -1,8 +1,229 @@
-#root {
-  width: 100vw;
-  height: 100vh;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0a0a0a;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* Loading Screen */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+  gap: 24px;
+}
+
+.loading-screen h2 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #e0e0e0;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #d4a853;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Overlay UI */
+.overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Header */
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header h1 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.header .subtitle {
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  color: #888;
+  text-transform: uppercase;
+}
+
+/* Donation Panel */
+.donation-panel {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  pointer-events: auto;
+}
+
+.donation-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  min-width: 360px;
+}
+
+.donation-amounts {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.donation-current {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #d4a853;
+}
+
+.donation-separator {
+  font-size: 1rem;
+  color: #555;
+}
+
+.donation-goal {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #888;
+}
+
+.donation-currency {
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #666;
+  margin-left: 4px;
+}
+
+/* Progress Bar */
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #d4a853, #e8c97a);
+  transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.donation-percent {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #d4a853;
+  letter-spacing: 1px;
+}
+
+/* Donate Button */
+.donate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 36px;
+  background: linear-gradient(135deg, #d4a853, #c49a48);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.donate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(212, 168, 83, 0.3);
+}
+
+/* Hint text */
+.interaction-hint {
+  position: absolute;
+  bottom: 16px;
+  right: 40px;
+  font-size: 0.7rem;
+  color: #444;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .header {
+    padding: 20px 24px;
+  }
+  .header h1 {
+    font-size: 0.9rem;
+  }
+  .donation-card {
+    min-width: unset;
+    width: calc(100vw - 48px);
+    padding: 20px 24px;
+  }
+  .donation-current {
+    font-size: 1.5rem;
+  }
+  .donation-panel {
+    bottom: 24px;
+  }
+  .interaction-hint {
+    display: none;
+  }
 }
