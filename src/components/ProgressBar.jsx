@@ -3,7 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
 
-const ProgressBar = ({ position, currentValue, goal = 300300 }) => {
+const ProgressBar = ({ position, currentValue, goal = 301300 }) => {
   const barRef = useRef();
   const groupRef = useRef();
   const { camera } = useThree();
