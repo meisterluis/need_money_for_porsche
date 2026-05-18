@@ -1,5 +1,6 @@
-import { Suspense, useState, useEffect, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Suspense, useState, useEffect, useRef, useCallback } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Vector3 } from "three";
 import { Porsche } from "./components/Porsche_gt3_rs";
 import { Model as MobilePhone } from "./MobilePhone4";
 import {
@@ -113,11 +114,103 @@ function Scene({ isMobile }) {
   );
 }
 
+function getBirdsEyePosition(targetPosition) {
+  const [x, y, z] = targetPosition;
+  const radius = Math.max(Math.hypot(x, y, z), 4.5);
+  return [x * 0.25, radius + 4.5, z * 0.25];
+}
+
+function CameraIntroController({ targetPosition, isActive, controlsRef, onFinish }) {
+  const { camera, gl } = useThree();
+  const startTimeRef = useRef(null);
+  const startPosRef = useRef(new Vector3());
+  const targetPosRef = useRef(new Vector3());
+  const doneRef = useRef(false);
+
+  useEffect(() => {
+    targetPosRef.current.set(...targetPosition);
+  }, [targetPosition]);
+
+  const finishIntro = useCallback(() => {
+    if (doneRef.current) return;
+
+    doneRef.current = true;
+    camera.position.set(...targetPosition);
+    camera.lookAt(0, 0, 0);
+
+    if (controlsRef.current) {
+      controlsRef.current.enabled = true;
+      controlsRef.current.update();
+    }
+
+    onFinish();
+  }, [camera, controlsRef, onFinish, targetPosition]);
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    doneRef.current = false;
+    startTimeRef.current = null;
+
+    const [sx, sy, sz] = getBirdsEyePosition(targetPosition);
+    startPosRef.current.set(sx, sy, sz);
+    camera.position.copy(startPosRef.current);
+    camera.lookAt(0, 0, 0);
+
+    if (controlsRef.current) {
+      controlsRef.current.enabled = false;
+      controlsRef.current.update();
+    }
+  }, [camera, controlsRef, isActive, targetPosition]);
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    const stop = () => finishIntro();
+    const element = gl.domElement;
+
+    window.addEventListener("keydown", stop, true);
+    window.addEventListener("wheel", stop, { capture: true, passive: true });
+    element.addEventListener("pointerdown", stop, {
+      capture: true,
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("keydown", stop, true);
+      window.removeEventListener("wheel", stop, true);
+      element.removeEventListener("pointerdown", stop, true);
+    };
+  }, [finishIntro, gl, isActive]);
+
+  useFrame((state) => {
+    if (!isActive || doneRef.current) return;
+
+    if (startTimeRef.current == null) {
+      startTimeRef.current = state.clock.elapsedTime;
+    }
+
+    const duration = 2.2;
+    const elapsed = state.clock.elapsedTime - startTimeRef.current;
+    const t = Math.min(elapsed / duration, 1);
+    const smooth = t * t * (3 - 2 * t);
+
+    camera.position.lerpVectors(startPosRef.current, targetPosRef.current, smooth);
+    camera.lookAt(0, 0, 0);
+
+    if (t >= 1) finishIntro();
+  });
+
+  return null;
+}
+
 function App() {
   const [currentValue, setCurrentValue] = useState(0);
   const [goal, setGoal] = useState(250000);
   const [donatedPeople, setDonatedPeople] = useState(0);
   const [viewport, setViewport] = useState({ width: 1200, height: 900 });
+  const [isIntroActive, setIsIntroActive] = useState(true);
+  const controlsRef = useRef(null);
 
   useEffect(() => {
     fetch("/config.json")
@@ -178,12 +271,19 @@ function App() {
       }
     : { position: [3.5, 1.8, 0], scale: 0.8 };
 
+  const initialCameraPosition = isIntroActive
+    ? getBirdsEyePosition(cameraConfig.position)
+    : cameraConfig.position;
+
   return (
     <>
       <Canvas
         shadows
         dpr={isMobile ? [1, 1.5] : [1, 2]}
-        camera={cameraConfig}
+        camera={{
+          ...cameraConfig,
+          position: initialCameraPosition,
+        }}
         gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
         onCreated={({ gl }) => {
           gl.setClearColor("#0a0a0a");
@@ -194,7 +294,15 @@ function App() {
         <Suspense fallback={null}>
           <Scene isMobile={isMobile} />
         </Suspense>
+        <CameraIntroController
+          targetPosition={cameraConfig.position}
+          isActive={isIntroActive}
+          controlsRef={controlsRef}
+          onFinish={() => setIsIntroActive(false)}
+        />
         <OrbitControls
+          ref={controlsRef}
+          enabled={!isIntroActive}
           autoRotate
           autoRotateSpeed={controlsConfig.autoRotateSpeed}
           enablePan={false}
