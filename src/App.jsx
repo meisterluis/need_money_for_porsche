@@ -126,6 +126,7 @@ function CameraIntroController({ targetPosition, isActive, controlsRef, onFinish
   const startPosRef = useRef(new Vector3());
   const targetPosRef = useRef(new Vector3());
   const doneRef = useRef(false);
+  const hasStartedRef = useRef(false);
 
   useEffect(() => {
     targetPosRef.current.set(...targetPosition);
@@ -151,6 +152,7 @@ function CameraIntroController({ targetPosition, isActive, controlsRef, onFinish
 
     doneRef.current = false;
     startTimeRef.current = null;
+    hasStartedRef.current = false;
 
     const [sx, sy, sz] = getBirdsEyePosition(targetPosition);
     startPosRef.current.set(sx, sy, sz);
@@ -166,25 +168,27 @@ function CameraIntroController({ targetPosition, isActive, controlsRef, onFinish
   useEffect(() => {
     if (!isActive) return;
 
-    const stop = () => finishIntro();
+    const startIntro = () => {
+      if (hasStartedRef.current) return;
+
+      hasStartedRef.current = true;
+      startTimeRef.current = null;
+    };
     const element = gl.domElement;
 
-    window.addEventListener("keydown", stop, true);
-    window.addEventListener("wheel", stop, { capture: true, passive: true });
-    element.addEventListener("pointerdown", stop, {
+    element.addEventListener("pointerdown", startIntro, {
       capture: true,
       passive: true,
     });
 
     return () => {
-      window.removeEventListener("keydown", stop, true);
-      window.removeEventListener("wheel", stop, true);
-      element.removeEventListener("pointerdown", stop, true);
+      element.removeEventListener("pointerdown", startIntro, true);
     };
-  }, [finishIntro, gl, isActive]);
+  }, [gl, isActive]);
 
   useFrame((state) => {
     if (!isActive || doneRef.current) return;
+    if (!hasStartedRef.current) return;
 
     if (startTimeRef.current == null) {
       startTimeRef.current = state.clock.elapsedTime;
