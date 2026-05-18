@@ -69,6 +69,10 @@ function Overlay({ currentValue, goal }) {
         <a
           className="donate-btn"
           href="twint://"
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = "twint://";
+          }}
         >
           Donate Now
         </a>
