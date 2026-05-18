@@ -31,7 +31,7 @@ function Loader() {
   );
 }
 
-function Overlay({ currentValue, goal }) {
+function Overlay({ currentValue, goal, donatedPeople }) {
   const progress = Math.min(currentValue / goal, 1);
   const percentage = (progress * 100).toFixed(1);
 
@@ -65,6 +65,9 @@ function Overlay({ currentValue, goal }) {
             />
           </div>
           <span className="donation-percent">{percentage}% funded</span>
+          <span className="donation-people">
+            {donatedPeople.toLocaleString("de-CH")} people donated
+          </span>
         </div>
         <div className="donation-note" role="note" aria-live="polite">
           Scan the QR code on the paper with TWINT. The current funded amount
@@ -113,6 +116,7 @@ function Scene({ isMobile }) {
 function App() {
   const [currentValue, setCurrentValue] = useState(0);
   const [goal, setGoal] = useState(250000);
+  const [donatedPeople, setDonatedPeople] = useState(0);
   const [viewport, setViewport] = useState({ width: 1200, height: 900 });
 
   useEffect(() => {
@@ -121,6 +125,9 @@ function App() {
       .then((data) => {
         setCurrentValue(data.currentAmount);
         if (data.goal) setGoal(data.goal);
+        if (typeof data.donatedPeople === "number") {
+          setDonatedPeople(data.donatedPeople);
+        }
       });
   }, []);
 
@@ -207,7 +214,11 @@ function App() {
         </Hud>
       </Canvas>
       <Suspense fallback={<Loader />}>
-        <Overlay currentValue={currentValue} goal={goal} />
+        <Overlay
+          currentValue={currentValue}
+          goal={goal}
+          donatedPeople={donatedPeople}
+        />
       </Suspense>
     </>
   );

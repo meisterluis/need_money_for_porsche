@@ -172,6 +172,13 @@ body {
   letter-spacing: 1px;
 }
 
+.donation-people {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #d2d2d2;
+  letter-spacing: 0.4px;
+}
+
 /* Donation Note */
 .donation-note {
   width: 100%;
@@ -259,10 +266,6 @@ body {
 
   .donation-panel {
     bottom: calc(10px + env(safe-area-inset-bottom));
-  }
-
-  .donate-btn {
-    display: none;
   }
 
   .donation-note {
