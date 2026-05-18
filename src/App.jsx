@@ -68,10 +68,10 @@ function Overlay({ currentValue, goal }) {
         </div>
         <a
           className="donate-btn"
-          href="twint://"
+          href="twint://home"
           onClick={(e) => {
             e.preventDefault();
-            window.location.href = "twint://";
+            window.location.href = "twint://home";
           }}
         >
           Donate Now
@@ -149,8 +149,8 @@ function App() {
 
   const cameraConfig = isMobile
     ? {
-        position: isNarrowPhone ? [2.7, 1.25, 3.4] : [3, 1.45, 3.9],
-        fov: isNarrowPhone ? 56 : 52,
+        position: isNarrowPhone ? [3.15, 1.45, 4.35] : [3.45, 1.6, 4.75],
+        fov: isNarrowPhone ? 54 : 50,
       }
     : { position: [4, 2, 5], fov: 45 };
 
