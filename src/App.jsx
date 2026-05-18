@@ -66,16 +66,10 @@ function Overlay({ currentValue, goal }) {
           </div>
           <span className="donation-percent">{percentage}% funded</span>
         </div>
-        <a
-          className="donate-btn"
-          href="twint://home"
-          onClick={(e) => {
-            e.preventDefault();
-            window.location.href = "twint://home";
-          }}
-        >
-          Donate Now
-        </a>
+        <div className="donation-note" role="note" aria-live="polite">
+          Scan the QR code on the paper with TWINT. The current funded amount
+          will be updated shortly.
+        </div>
       </div>
 
       {/* Hint */}

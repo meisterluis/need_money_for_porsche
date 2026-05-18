@@ -172,31 +172,19 @@ body {
   letter-spacing: 1px;
 }
 
-/* Donate Button */
-.donate-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+/* Donation Note */
+.donation-note {
   width: 100%;
-  padding: 14px 24px;
-  background: linear-gradient(135deg, #d4a853, #c49a48);
-  color: #0a0a0a;
-  border: none;
-  border-radius: 50px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.donate-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(212, 168, 83, 0.3);
+  padding: 14px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 168, 83, 0.35);
+  background: rgba(212, 168, 83, 0.12);
+  color: #f3e6bf;
+  text-align: center;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  letter-spacing: 0.2px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
 }
 
 /* Hint text */
@@ -229,9 +217,11 @@ body {
     width: auto;
   }
 
-  .donate-btn {
+  .donation-note {
     width: auto;
-    padding: 14px 36px;
+    max-width: 420px;
+    padding: 14px 22px;
+    font-size: 0.9rem;
   }
 
   .interaction-hint {
@@ -272,8 +262,12 @@ body {
   }
 
   .donate-btn {
-    font-size: 0.82rem;
-    letter-spacing: 1.5px;
+    display: none;
+  }
+
+  .donation-note {
+    padding: 12px 14px;
+    font-size: 0.76rem;
   }
 
   .interaction-hint {
